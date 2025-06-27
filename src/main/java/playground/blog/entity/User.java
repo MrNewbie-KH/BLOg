@@ -43,6 +43,10 @@ public class User {
     @Column(name = "updated_at",nullable = false)
     private Timestamp updatedAt;
 //    -------------------------------------------
-    @OneToMany (mappedBy = "article")
+//    articles written by the current user
+    @OneToMany (mappedBy = "author")
     private List<Article> articles;
+//    comments written by the current user
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 }

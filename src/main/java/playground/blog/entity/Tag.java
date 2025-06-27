@@ -9,25 +9,25 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "tags")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
     @Column(name = "name", nullable = false, length = 50)
     private String name;
+
     @ManyToMany
     @JoinTable(
-        name="categories_articles",
-        joinColumns=@JoinColumn(name = "category_id"),
-        inverseJoinColumns=@JoinColumn(name = "article_id")
+            name="tags_articles",
+            joinColumns=@JoinColumn(name = "tag_id"),
+            inverseJoinColumns=@JoinColumn(name = "article_id")
     )
     private List<Article> articles;
-    private String description;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

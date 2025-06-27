@@ -24,21 +24,35 @@ public class Article {
     private String title;
     @Column(name = "content",nullable = false)
     private String content;
+//    the author of the article
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
+
+
+//    ========================================
     @ManyToMany
     @JoinTable(
-            name="categories_posts",
+            name="categories_articles",
             joinColumns=@JoinColumn(name = "article_id"),
             inverseJoinColumns=@JoinColumn(name = "category_id")
     )
     private List<Category> categories;
-    private String tags;
+    @ManyToMany
+    @JoinTable(
+            name="tags_articles",
+            joinColumns=@JoinColumn(name = "article_id"),
+            inverseJoinColumns=@JoinColumn(name = "tag_id")
+    )
+
+    private List<Tag> tags;
+    //    ========================================
+    @OneToMany(mappedBy = "like")
+    private List<Like> likes;
     private String image;
     private Timestamp createdAt;
     private Timestamp updatedAt;
     private Long readTime;
-    private String attachments;
+    private List<String> attachments;
     private String status;
 }
