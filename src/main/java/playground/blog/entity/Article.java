@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,7 +27,13 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
-    private String category;
+    @ManyToMany
+    @JoinTable(
+            name="categories_posts",
+            joinColumns=@JoinColumn(name = "article_id"),
+            inverseJoinColumns=@JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
     private String tags;
     private String image;
     private Timestamp createdAt;
