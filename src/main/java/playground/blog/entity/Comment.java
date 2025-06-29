@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -14,24 +14,33 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class Comment {
-    @Id
+//=========== attributes ==============
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+     @Column(name = "content", nullable = false)
     private String content;
+    @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
+    @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
-    @OneToMany(mappedBy = "parent")
+
+//=========== relationships ===========
+//=========== one to many =============
+    @OneToMany(mappedBy = "parentComment")
     private List<Comment> replies;
-    @ManyToOne
+//=========== many to many ============
+//=========== many to one =============
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id",nullable = true)
-    private Comment parent;
-//    in case of comment written by 1 user
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;
-//    comment belong to 1 article
-    @ManyToOne
+    private Comment parentComment;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;
-
+//=========== one to one ==============
 }

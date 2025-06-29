@@ -11,10 +11,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "likes")
 public class Like {
+//=========== attributes ==============
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+//=========== relationships ===========
+
+//=========== one to many =============
+//=========== many to many ============
+//=========== many to one =============
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "article_id")
     private Article article;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
+//=========== one to one ==============
+
+
 }

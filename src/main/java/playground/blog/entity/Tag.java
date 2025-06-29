@@ -14,20 +14,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tag {
+//=========== attributes ===========
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
     @Column(name = "name", nullable = false, length = 50)
     private String name;
-
-    @ManyToMany
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
+//=========== relationships ===========
+//=========== one to many =============
+//=========== many to many ============
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
-            name="tags_articles",
+            name= "tags_articles",
             joinColumns=@JoinColumn(name = "tag_id"),
             inverseJoinColumns=@JoinColumn(name = "article_id")
     )
     private List<Article> articles;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+
+//=========== many to ine ===========
+//=========== one to one ===========
 }
