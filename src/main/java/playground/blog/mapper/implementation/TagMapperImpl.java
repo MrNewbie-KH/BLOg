@@ -17,8 +17,6 @@ public class TagMapperImpl implements TagMapper {
     public Tag toEntity(TagDto tagDto) {
        return Tag.builder()
                .name(tagDto.getName())
-               .createdAt(new Timestamp(System.currentTimeMillis()))
-               .updatedAt(new Timestamp(System.currentTimeMillis()))
                .build();
     };
    @Builder

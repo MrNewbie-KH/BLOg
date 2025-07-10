@@ -21,7 +21,7 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50,unique = true)
     private String name;
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
@@ -40,4 +40,15 @@ public class Tag {
 
 //=========== many to ine ===========
 //=========== one to one ===========
+@PrePersist
+protected void onCreate() {
+    this.createdAt = new Timestamp(System.currentTimeMillis());
+    this.updatedAt = new Timestamp(System.currentTimeMillis());
+}
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
 }
