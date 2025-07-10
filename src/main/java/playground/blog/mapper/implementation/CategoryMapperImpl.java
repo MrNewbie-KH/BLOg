@@ -11,7 +11,6 @@ import playground.blog.mapper.CategoryMapper;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
     @Override
