@@ -48,13 +48,13 @@ public class User {
 //=========== relationships ===========
 
 //=========== one to many =============
-    @OneToMany (mappedBy = "author")
+    @OneToMany (mappedBy = "author",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Article> articles;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Comment> comments;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<GroupOfArticles> groups;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Like> likes;
     //=========== many to many ============
     @ManyToMany

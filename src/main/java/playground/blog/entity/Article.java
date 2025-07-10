@@ -54,12 +54,12 @@ public class Article {
     )
     private List<GroupOfArticles>groups;
 //============  One to many    ===============
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article" , cascade ={CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Like> likes;
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade ={CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Comment> comments;
 //============  many to One    ===============
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;
 //============one to one ============
