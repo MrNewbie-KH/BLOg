@@ -25,12 +25,13 @@ public class TagServiceImpl implements TagService {
        tagDtos.add(tagMapper.toResponse(tag));
     }
     return tagDtos;
-    };
-//    TagDto getTagById(Long id);
-//    TagDto getTagByName(String name);
-//    TagDto createTag(TagDto tagDto);
-//    TagDto updateTag(TagDto tagDto);
-//    void deleteTag(Long id);
+    }
 
-
+    @Override
+    public TagDto createTag(String name){
+        TagDto tagDto = new TagDto();
+        tagDto.setName(name);
+        tagRepository.save(tagMapper.toEntity(tagDto));
+        return tagDto;
+    }
 }
