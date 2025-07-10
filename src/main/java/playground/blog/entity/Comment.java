@@ -27,19 +27,19 @@ public class Comment {
 
 //=========== relationships ===========
 //=========== one to many =============
-    @OneToMany(mappedBy = "parentComment")
+    @OneToMany(mappedBy = "parentComment",cascade={CascadeType.REMOVE,CascadeType.PERSIST})
     private List<Comment> replies;
 //=========== many to many ============
 //=========== many to one =============
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id",nullable = true)
     private Comment parentComment;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;
 //=========== one to one ==============
