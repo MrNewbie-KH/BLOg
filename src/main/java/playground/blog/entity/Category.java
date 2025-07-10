@@ -40,4 +40,13 @@ public class Category {
     private List<Article> articles;
 //=========== many to ine =============
 //=========== one to one ==============
+@PrePersist
+public void prePersist(){
+    this.createdAt = new Timestamp(System.currentTimeMillis());
+    this.updatedAt = new Timestamp(System.currentTimeMillis());
+}
+    @PreUpdate
+    public void preUpdate(){
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
 }
