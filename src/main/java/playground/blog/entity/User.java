@@ -16,26 +16,25 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
 //=========== attributes ==============
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id",nullable = false)
     private Long id;
-    @Column(name = "user_name",nullable = false,unique = true,length = 255)
+    @Column(name = "user_name",nullable = true,length = 255)
     private String username;
     @Column(name = "password",nullable = false,length = 255)
     private String password;
-    @Column(name = "email",nullable = false,unique = true)
+    @Column(name = "email",nullable = false,unique = true,length = 255)
     private String email;
-    @Column(name = "email_verified",nullable = false)
+    @Column(name = "email_verified",nullable = true)
     private boolean emailVerified;
     @Column(name = "first_name",nullable = false)
     private String firstName;
     @Column(name = "last_name",nullable = false)
     private String lastName;
-    @Column(name = "is_active",nullable = false)
+    @Column(name = "is_active",nullable = true)
     private boolean isActive;
     @Column(name="profile_picture")
     private String profilePicURL;
@@ -69,6 +68,15 @@ public class User {
     private List<User> followers;
 //=========== many to one =============
 //=========== one to one ==============
+    @PrePersist
+    public void prePersist() {
+        this.createdAt= new Timestamp(System.currentTimeMillis());
+        this.updatedAt=new Timestamp(System.currentTimeMillis());
+    }
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt=new Timestamp(System.currentTimeMillis());
+    }
 
 
 

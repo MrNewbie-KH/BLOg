@@ -10,7 +10,7 @@ public interface UserService {
     UserResponseDTO updateUser(UserRequestDTO userRequestDTO);
     UserResponseDTO deleteUser(UserRequestDTO userRequestDTO);
     UserResponseDTO getUserById(UserRequestDTO userRequestDTO);
-    List<UserResponseDTO> getUsers();
+    List<UserResponseDTO> getAllUsers();
 
 }
 /*
