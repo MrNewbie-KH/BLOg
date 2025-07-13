@@ -1,5 +1,7 @@
 package playground.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,13 +18,9 @@ public class GroupOfArticles {
 //=========== relationships ===========
 
 //=========== one to many =============
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable
-            (
-            name = "groups_articles",
-            joinColumns = @JoinColumn(name ="group_id" ),
-            inverseJoinColumns = @JoinColumn(name = "article_id")
-            )
+    @ManyToMany(mappedBy = "groups",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @JsonBackReference
     private List<Article>articles;
 //=========== many to many ============
 //=========== many to ine =============

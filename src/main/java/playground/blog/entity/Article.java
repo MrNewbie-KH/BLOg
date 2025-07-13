@@ -1,4 +1,5 @@
 package playground.blog.entity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,8 @@ public class Article {
             joinColumns=@JoinColumn(name = "article_id"),
             inverseJoinColumns=@JoinColumn(name = "category_id")
     )
+    @JsonManagedReference
+
     private List<Category> categories;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -45,6 +48,8 @@ public class Article {
             joinColumns=@JoinColumn(name = "article_id"),
             inverseJoinColumns=@JoinColumn(name = "tag_id")
     )
+    @JsonManagedReference
+
     private List<Tag> tags;
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
@@ -52,6 +57,8 @@ public class Article {
             joinColumns = @JoinColumn(name = "article_id"),
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
+    @JsonManagedReference
+
     private List<GroupOfArticles>groups;
 //============  One to many    ===============
     @OneToMany(mappedBy = "article" , cascade ={CascadeType.PERSIST,CascadeType.REMOVE})

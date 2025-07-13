@@ -23,5 +23,5 @@ public class ArticleRequestDTO {
     private List<Long> categoryIds;
     private List<Long> groupIds;
     private List<String> attachments;
-    private User author;
+    private Long authorId;
 }

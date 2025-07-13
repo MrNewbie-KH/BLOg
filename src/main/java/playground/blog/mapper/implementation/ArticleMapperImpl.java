@@ -3,10 +3,9 @@ package playground.blog.mapper.implementation;
 import org.springframework.stereotype.Component;
 import playground.blog.dto.article.ArticleRequestDTO;
 import playground.blog.dto.article.ArticleResponseDTO;
-import playground.blog.entity.Article;
-import playground.blog.entity.Category;
-import playground.blog.entity.GroupOfArticles;
-import playground.blog.entity.Tag;
+import playground.blog.dto.category.CategoryResponseDTO;
+import playground.blog.dto.tag.TagDto;
+import playground.blog.entity.*;
 import playground.blog.mapper.ArticleMapper;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 public class ArticleMapperImpl implements ArticleMapper {
 
     @Override
-    public Article toEntity(ArticleRequestDTO articleRequestDTO, List<Tag>tags , List<Category>categories , List<GroupOfArticles>groups) {
+    public Article toEntity(ArticleRequestDTO articleRequestDTO, List<Tag>tags , List<Category>categories , List<GroupOfArticles>groups,User user) {
         return
                 Article.builder()
                         .title(articleRequestDTO.getTitle())
@@ -26,13 +25,13 @@ public class ArticleMapperImpl implements ArticleMapper {
                         .tags(tags)
                         .categories(categories)
                         .groups(groups)
-                        .author(articleRequestDTO.getAuthor())
+                        .author(user)
                         .attachments(articleRequestDTO.getAttachments())
                         .build();
     }
 
     @Override
-    public ArticleResponseDTO toResponse(Article article) {
+    public ArticleResponseDTO toResponse(Article article, List<TagDto> tagDtos, List<CategoryResponseDTO>categoryResponseDTOS,List<GroupOfArticles>groupOfArticles, long likeCount, long commentCount) {
         return ArticleResponseDTO.builder()
                 .id(article.getId())
                 .title(article.getTitle())
@@ -44,17 +43,11 @@ public class ArticleMapperImpl implements ArticleMapper {
                 .updatedAt(article.getUpdatedAt())
                 .author(article.getAuthor())
                 .attachments(article.getAttachments())
-                .tags(article.getTags())
-                .categories(article.getCategories())
-                .groups(article.getGroups())
+                .tagDtos(tagDtos)
+                .categoryResponseDTOS(categoryResponseDTOS)
+                .groups(groupOfArticles)
+                .commentCount(commentCount)
+                .likeCount(likeCount)
                 .build();
     }
 }
-/*
-
-    private List<String> attachments;
-    private String authorName;
-    private List<String> tagNames;
-    private List<String> categoryNames;
-    private List<String> groupNames;
- */

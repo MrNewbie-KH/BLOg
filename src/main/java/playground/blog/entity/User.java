@@ -1,5 +1,6 @@
 package playground.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,6 +49,8 @@ public class User {
 
 //=========== one to many =============
     @OneToMany (mappedBy = "author",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @JsonIgnore
+
     private List<Article> articles;
     @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Comment> comments;

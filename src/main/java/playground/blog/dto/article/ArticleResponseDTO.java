@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import playground.blog.dto.category.CategoryResponseDTO;
+import playground.blog.dto.tag.TagDto;
 import playground.blog.entity.Category;
 import playground.blog.entity.GroupOfArticles;
 import playground.blog.entity.Tag;
@@ -27,7 +29,10 @@ public class ArticleResponseDTO {
     private String status;
     private List<String> attachments;
     private User author;
-    private List<Tag> tags;
-    private List<Category> categories;
+    private List<TagDto> tagDtos;
+    private List<CategoryResponseDTO> categoryResponseDTOS;
     private List<GroupOfArticles> groups;
+    private long likeCount;
+    private long commentCount;
+
 }

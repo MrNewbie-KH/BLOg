@@ -1,5 +1,7 @@
 package playground.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,12 +36,8 @@ public class Category {
 
 //=========== one to many =============
 //=========== many to many ============
-    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(
-        name= "categories_articles",
-        joinColumns=@JoinColumn(name = "category_id"),
-        inverseJoinColumns=@JoinColumn(name = "article_id")
-    )
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY,cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonBackReference
     private List<Article> articles;
 //=========== many to ine =============
 //=========== one to one ==============
