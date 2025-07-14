@@ -1,13 +1,20 @@
 package playground.blog.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "group_of_articles")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class GroupOfArticles {
 //=========== attributes ==============
     @Id
@@ -19,7 +26,6 @@ public class GroupOfArticles {
 
 //=========== one to many =============
     @ManyToMany(mappedBy = "groups",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-
     @JsonBackReference
     private List<Article>articles;
 //=========== many to many ============
