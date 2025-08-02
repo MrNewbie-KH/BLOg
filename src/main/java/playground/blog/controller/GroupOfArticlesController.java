@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 import playground.blog.dto.groupOfArticles.GroupOfArticlesRequestDTO;
 import playground.blog.dto.groupOfArticles.GroupOfArticlesResponseDTO;
-import playground.blog.entity.GroupOfArticles;
 import playground.blog.service.GroupOfArticlesService;
 
 import java.util.List;
