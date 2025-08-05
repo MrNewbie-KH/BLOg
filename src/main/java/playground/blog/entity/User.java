@@ -84,16 +84,17 @@ public class User implements UserDetails {
     public void preUpdate() {
         this.updatedAt=new Timestamp(System.currentTimeMillis());
     }
-    @Enumerated(EnumType.STRING)
-    Role role;
 
 
 //    User datails methods implementation
+    @Enumerated(EnumType.STRING)
+    Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
+//    this one by default wasn't implemented cuz of lombok implemented it behind the scenes
     @Override
     public String getPassword() {
         return password;
