@@ -63,7 +63,7 @@ public class JWTService {
     }
 //    validate a token
     public boolean isTokenValid(String token , UserDetails userDetails) {
-        if(!extractUsername(token).equals(userDetails.getUsername())||! isTokenExpired(token)) {
+        if(!extractUsername(token).equals(userDetails.getUsername()) && ! isTokenExpired(token)) {
             return false;
         }
         return true;

@@ -5,7 +5,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,6 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
+    private final UserDetailsService userDetailsService;
 
 //    filter logic comes here
     @Override
@@ -34,10 +39,23 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         token = authHeader.substring(7);
 //        extract email from the token
        String email =  jwtService.extractUsername(token);
+//       here we look for that user already  has a token "logged in but
+//       with no existence in the context holder"
        if(email!=null && SecurityContextHolder.getContext().getAuthentication()==null){
-
+           UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+           if(jwtService.isTokenValid(token,userDetails)){
+               UsernamePasswordAuthenticationToken authObject=new UsernamePasswordAuthenticationToken
+                       (
+                               userDetails,
+                               null,
+                               userDetails.getAuthorities()
+                       );
+               authObject.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//               now we update holder
+               SecurityContextHolder.getContext().setAuthentication(authObject);
+           }
        }
-
+filterChain.doFilter(request,response);
 
 
     }
