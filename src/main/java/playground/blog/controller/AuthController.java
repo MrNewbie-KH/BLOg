@@ -8,14 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 import playground.blog.dto.auth.AuthenticateResponseDTO;
 import playground.blog.dto.auth.LoginRequestDTO;
 import playground.blog.dto.auth.RegisterRequestDTO;
+import playground.blog.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    private final AuthService authService;
     @PostMapping("/register")
     public AuthenticateResponseDTO register(@RequestBody RegisterRequestDTO registerRequestDTO) {
-        return  null ;
+        return authService.register(registerRequestDTO);
     }
     @PostMapping("/authenticate")
     public AuthenticateResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {

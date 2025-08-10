@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/testsecurity")
-public class Test {
+public class TestController {
     @GetMapping
     public ResponseEntity<String> test(){
         return ResponseEntity.ok("Hello World");

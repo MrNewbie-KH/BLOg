@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Service
 public class JWTService {
-    final String SECRET_KEY = "bXlzZWNyZXRrZXlmb3Jqd3RzaWdubmF0dXJl";
+    final String SECRET_KEY = "u1iX5nTPz3DZTqJZ4QAhgVpD3i7n3O3XgyvmvG0Wn3w=";
 
     //create key to sign with
     public Key getSignInKey() {
