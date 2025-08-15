@@ -11,7 +11,7 @@ import playground.blog.dto.auth.RegisterRequestDTO;
 import playground.blog.service.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -19,8 +19,8 @@ public class AuthController {
     public AuthenticateResponseDTO register(@RequestBody RegisterRequestDTO registerRequestDTO) {
         return authService.register(registerRequestDTO);
     }
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public AuthenticateResponseDTO login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        return  null ;
+       return  authService.login(loginRequestDTO);
     }
 }

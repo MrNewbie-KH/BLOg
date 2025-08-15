@@ -28,6 +28,8 @@ public class Category {
     private String name;
     @Column(name = "description", nullable = true)
     private String description;
+    @Column(name = "is_default", nullable =false)
+    private boolean isDefault = false;
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
     @Column(name = "updated_at", nullable = false)
@@ -45,9 +47,16 @@ public class Category {
 public void prePersist(){
     this.createdAt = new Timestamp(System.currentTimeMillis());
     this.updatedAt = new Timestamp(System.currentTimeMillis());
+    normalizeNames();
 }
     @PreUpdate
     public void preUpdate(){
         this.updatedAt = new Timestamp(System.currentTimeMillis());
+        normalizeNames();
+    }
+
+    public void normalizeNames(){
+    name = name.toLowerCase();
+    name= name.trim();
     }
 }
