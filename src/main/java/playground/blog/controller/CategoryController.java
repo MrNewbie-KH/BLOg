@@ -1,9 +1,13 @@
 package playground.blog.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import playground.blog.dto.category.CategoryRequestDTO;
 import playground.blog.dto.category.CategoryResponseDTO;
+import playground.blog.entity.User;
+import playground.blog.repository.UserRepository;
 import playground.blog.service.CategoryService;
 
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
 private final CategoryService categoryService;
+private final UserRepository userRepository;
 @PostMapping
 public CategoryResponseDTO createCategory( @RequestBody CategoryRequestDTO categoryRequestDTO){
     return categoryService.createCategory(categoryRequestDTO);

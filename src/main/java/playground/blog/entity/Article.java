@@ -66,8 +66,8 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade ={CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Comment> comments;
 //============  many to One    ===============
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id" , nullable = false)
     private User author;
 //============one to one ============
 

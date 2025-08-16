@@ -7,17 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import playground.blog.dto.article.ArticleRequestDTO;
 import playground.blog.dto.article.ArticleResponseDTO;
+import playground.blog.dto.article.CreateArticleRequestDTO;
 import playground.blog.service.ArticleService;
 
 @RestController
-@RequestMapping(path = "/api/articles")
+@RequestMapping(path = "/api/v1/articles")
 @AllArgsConstructor
 public class ArticleController {
     private final ArticleService articleService;
     @PostMapping
-    public ArticleResponseDTO createArticle(@RequestBody ArticleRequestDTO articleRequestDTO) {
-        return articleService.createArticle(articleRequestDTO);
-
+    public ArticleResponseDTO createArticle(@RequestBody CreateArticleRequestDTO requestDTO) {
+        return articleService.createArticle(requestDTO);
     }
 /*
 create article
@@ -33,5 +33,4 @@ get all articles based on  a specific tag
 sort article based on the available like count
 sorting and pagination
  */
-
 }
