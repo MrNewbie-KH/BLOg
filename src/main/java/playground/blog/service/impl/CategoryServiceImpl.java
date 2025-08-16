@@ -1,5 +1,6 @@
 package playground.blog.service.impl;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 import playground.blog.dto.category.CategoryRequestDTO;
 import playground.blog.dto.category.CategoryResponseDTO;
 import playground.blog.entity.Category;
+import playground.blog.exception.custom.EntityAlreadyExist;
+import playground.blog.exception.custom.NotFoundException;
 import playground.blog.mapper.CategoryMapper;
 import playground.blog.repository.CategoryRepository;
 import playground.blog.service.CategoryService;
@@ -30,20 +33,31 @@ public class CategoryServiceImpl implements CategoryService {
 }
 @Override
     public CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO){
-    Category cat =categoryRepository.save(categoryMapper.toEntity(categoryRequestDTO));
-    return categoryMapper.toResponse(cat);
+//    check existance
+    boolean isAlreadyExist  = categoryRepository.existsByNameIgnoreCase(categoryRequestDTO.getName());
+    if(isAlreadyExist){
+        throw new EntityAlreadyExist("Category with name " + categoryRequestDTO.getName() + " already exists and can't be duplicated");
+    }
+    if(categoryRequestDTO.getName()==null || categoryRequestDTO.getName().trim().equals("")){
+        throw new NotFoundException("Category name can't be null or empty");
+    }
+    else{
+        Category cat =categoryRepository.save(categoryMapper.toEntity(categoryRequestDTO));
+        return categoryMapper.toResponse(cat);
+    }
+
 }
 @Override
       public  CategoryResponseDTO getCategoryById(Long id){
       return categoryRepository.findById(id)
               .map(category -> categoryMapper.toResponse(category))
-              .orElseThrow(()->new EntityNotFoundException("Category not found"));
+              .orElseThrow(()->new NotFoundException("Category with id  "+id +" not found"));
 }
 @Override
 public  CategoryResponseDTO getCategoryByName(String name){
     return categoryRepository.findByName(name)
             .map(category -> categoryMapper.toResponse(category))
-            .orElseThrow(()->new EntityNotFoundException("Category not found"));
+            .orElseThrow(()->new NotFoundException("Category not found"));
 }
         @Override
         public CategoryResponseDTO updateCategory(Long id, CategoryRequestDTO categoryRequestDTO){
