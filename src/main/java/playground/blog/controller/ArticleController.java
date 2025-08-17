@@ -24,9 +24,19 @@ public class ArticleController {
     public List<CardArticleResponseDTO> findAllMyArticles() {
         return articleService.findAllMyArticles();
     }
+    @GetMapping("/{id}")
+    public ArticleResponseDTO findArticleById(@PathVariable Long id) {
+        return  articleService.findArticleById( id);
+    }
+    @GetMapping("/category/{id}")
+    public List<CardArticleResponseDTO> findArticlesByCategory(@PathVariable Long id) {
+        return  articleService.findArticlesByCategory(id);
+    }
+
+
 /*
-create article
-get all articles
+
+t
 get article by id
 get articles written by an author
 update article

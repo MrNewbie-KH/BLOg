@@ -11,4 +11,6 @@ import java.util.List;
 public interface ArticleService {
     ArticleResponseDTO createArticle(CreateArticleRequestDTO requestDTO);
     List<CardArticleResponseDTO> findAllMyArticles();
+    ArticleResponseDTO findArticleById(Long id);
+    List<CardArticleResponseDTO>findArticlesByCategory(Long id);
 }

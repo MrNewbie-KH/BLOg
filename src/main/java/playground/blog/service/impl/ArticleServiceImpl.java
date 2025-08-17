@@ -70,5 +70,25 @@ public class ArticleServiceImpl implements ArticleService {
        return myArticles.stream().map(article -> articleMapper.toCardResponse(article,currentUser.getFirstName())).toList();
 
     }
+    public ArticleResponseDTO findArticleById(Long id){
+       Article article =  articleRepository.findById(id).orElseThrow(()-> new NotFoundException("Article not found"));
+       List<Tag> tags = article.getTags();
+       List<TagDto> tagDTOList = tags.stream().map(tag->tagMapper.toResponse(tag)).toList();
+       List<Category> categories = article.getCategories();
+        List<CategoryResponseDTO> categoryResponseDTOS = categories.stream().map(category->categoryMapper.toResponse(category)).toList();
+        User authorOfTheArticle = article.getAuthor();
+        UserResponseDTO userResponseDTO = userMapper.toResponse(authorOfTheArticle);
+       return articleMapper.toResponse(article,tagDTOList,userResponseDTO,categoryResponseDTOS,null,0,0);
+    }
+
+    @Override
+    public List<CardArticleResponseDTO> findArticlesByCategory(Long id) {
+        Category category =categoryRepository.findById(id).orElseThrow(()-> new NotFoundException("Category not found"));
+        List<Article> articles = articleRepository.findAllByCategories(category);
+
+            return articles.stream().map(article -> articleMapper.toCardResponse(article,article.getAuthor().getFirstName())).toList();
+
+
+    }
 
 }
