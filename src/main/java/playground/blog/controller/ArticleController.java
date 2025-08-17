@@ -1,14 +1,15 @@
 package playground.blog.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.Getter;
+import org.springframework.web.bind.annotation.*;
 import playground.blog.dto.article.ArticleRequestDTO;
 import playground.blog.dto.article.ArticleResponseDTO;
+import playground.blog.dto.article.CardArticleResponseDTO;
 import playground.blog.dto.article.CreateArticleRequestDTO;
 import playground.blog.service.ArticleService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/v1/articles")
@@ -18,6 +19,10 @@ public class ArticleController {
     @PostMapping
     public ArticleResponseDTO createArticle(@RequestBody CreateArticleRequestDTO requestDTO) {
         return articleService.createArticle(requestDTO);
+    }
+    @GetMapping
+    public List<CardArticleResponseDTO> findAllMyArticles() {
+        return articleService.findAllMyArticles();
     }
 /*
 create article

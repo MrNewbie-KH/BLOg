@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import playground.blog.dto.article.ArticleRequestDTO;
 import playground.blog.dto.article.ArticleResponseDTO;
+import playground.blog.dto.article.CardArticleResponseDTO;
 import playground.blog.dto.article.CreateArticleRequestDTO;
 import playground.blog.dto.category.CategoryResponseDTO;
 import playground.blog.dto.tag.TagDto;
@@ -19,6 +20,7 @@ import playground.blog.mapper.UserMapper;
 import playground.blog.repository.*;
 import playground.blog.service.ArticleService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,7 +33,6 @@ public class ArticleServiceImpl implements ArticleService {
     private final UserMapper userMapper;
 //    to be added
 //    private final GroupOfArticlesMapper groupOfArticlesMapper;
-
     private final TagRepository tagRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
@@ -50,6 +51,10 @@ public class ArticleServiceImpl implements ArticleService {
         List<Tag>tags = tagRepository.findAllById(requestDTO.getTagIds());
         List<TagDto> tagResponseList = tags.stream().map(tag->tagMapper.toResponse(tag)).toList();
 //        categories----------------
+        if (requestDTO.getCategoryIds() == null || requestDTO.getCategoryIds().isEmpty()) {
+            requestDTO.setCategoryIds(List.of(1L)); // default category
+        }
+
         List<Category> categories = categoryRepository.findAllById(requestDTO.getCategoryIds());
         List<CategoryResponseDTO> categoryResponseList = categories.stream().map(category->categoryMapper.toResponse(category)).toList();
        Article savedArticle =  articleRepository.save(articleMapper.toEntity(requestDTO, tags, categories,null,currentUser));
@@ -57,5 +62,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     }
 //    --------------------------------------------------------
+    public List<CardArticleResponseDTO> findAllMyArticles(){
+        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authObject.getName();
+        User currentUser = userRepository.findByEmail(userEmail).orElseThrow(()-> new NotFoundException("User not found"));
+       List<Article> myArticles =  articleRepository.findAllByAuthor(currentUser);
+       return myArticles.stream().map(article -> articleMapper.toCardResponse(article,currentUser.getFirstName())).toList();
+
+    }
 
 }

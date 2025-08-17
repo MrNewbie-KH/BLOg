@@ -3,6 +3,7 @@ package playground.blog.mapper.implementation;
 import org.springframework.stereotype.Component;
 import playground.blog.dto.article.ArticleRequestDTO;
 import playground.blog.dto.article.ArticleResponseDTO;
+import playground.blog.dto.article.CardArticleResponseDTO;
 import playground.blog.dto.article.CreateArticleRequestDTO;
 import playground.blog.dto.category.CategoryResponseDTO;
 import playground.blog.dto.tag.TagDto;
@@ -46,6 +47,16 @@ public class ArticleMapperImpl implements ArticleMapper {
                 .groups(groupOfArticles)
                 .commentCount(commentCount)
                 .likeCount(likeCount)
+                .build();
+    }
+
+    @Override
+    public CardArticleResponseDTO toCardResponse(Article article,String author) {
+        return  CardArticleResponseDTO.builder()
+                .id(article.getId())
+                .title(article.getTitle())
+                .content(article.getContent())
+                .authorName(author)
                 .build();
     }
 }
