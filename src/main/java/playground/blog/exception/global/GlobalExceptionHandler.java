@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import playground.blog.dto.error.ErrorResponseDTO;
+import playground.blog.exception.custom.DuplicateValueException;
 import playground.blog.exception.custom.EntityAlreadyExist;
 import playground.blog.exception.custom.NotFoundException;
 import playground.blog.exception.custom.NotNullException;
@@ -35,6 +36,17 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler
     public ResponseEntity<ErrorResponseDTO> handleNotNullException(NotNullException ex, HttpServletRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST)
+                .path(request.getRequestURI())
+                .error("BAD REQUEST")
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponseDTO> handleDuplicateValueException(DuplicateValueException ex, HttpServletRequest request) {
         ErrorResponseDTO error = ErrorResponseDTO.builder()
                 .message(ex.getMessage())
                 .status(HttpStatus.BAD_REQUEST)

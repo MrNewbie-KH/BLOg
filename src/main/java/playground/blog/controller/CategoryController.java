@@ -16,31 +16,31 @@ import java.util.List;
 @RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
 public class CategoryController {
-private final CategoryService categoryService;
-private final UserRepository userRepository;
-@PostMapping
-public CategoryResponseDTO createCategory( @RequestBody CategoryRequestDTO categoryRequestDTO){
-    return categoryService.createCategory(categoryRequestDTO);
-}
-@GetMapping
-public List<CategoryResponseDTO> getAllCategories(){
-    return categoryService.getAllCategories();
-}
-@GetMapping("/{id}")
-public CategoryResponseDTO getCategoryById(@PathVariable Long id){
-    return categoryService.getCategoryById(id);
-}
-@GetMapping("/search")
-public CategoryResponseDTO getCategoryByName(@RequestParam("name") String name){
-    return categoryService.getCategoryByName(name);
-}
-@PutMapping("/{id}")
-public CategoryResponseDTO updateCategory(@PathVariable Long id,@RequestBody CategoryRequestDTO categoryRequestDTO){
-    return categoryService.updateCategory(id,categoryRequestDTO);
-}
-@DeleteMapping("/{id}")
-public CategoryResponseDTO deleteCategory(@PathVariable Long id){
-    return categoryService.deleteCategory(id);
-}
+    private final CategoryService categoryService;
+    private final UserRepository userRepository;
+    @PostMapping
+    public CategoryResponseDTO createCategory( @RequestBody CategoryRequestDTO categoryRequestDTO){
+        return categoryService.createCategory(categoryRequestDTO);
+    }
+    @GetMapping
+    public List<CategoryResponseDTO> getAllCategories(){
+        return categoryService.getAllCategories();
+    }
+    @GetMapping("/{id}")
+    public CategoryResponseDTO getCategoryById(@PathVariable Long id){
+        return categoryService.getCategoryById(id);
+    }
+    @GetMapping("/search")
+    public CategoryResponseDTO getCategoryByName(@RequestParam("name") String name){
+        return categoryService.getCategoryByName(name);
+    }
+    @PutMapping("/{id}")
+    public CategoryResponseDTO updateCategory(@PathVariable Long id,@RequestBody CategoryRequestDTO categoryRequestDTO){
+        return categoryService.updateCategory(id,categoryRequestDTO);
+    }
+    @DeleteMapping("/{id}")
+    public CategoryResponseDTO deleteCategory(@PathVariable Long id){
+        return categoryService.deleteCategory(id);
+    }
 
 }
