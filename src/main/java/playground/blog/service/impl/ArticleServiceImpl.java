@@ -90,5 +90,13 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     }
+    @Override
+    public List<CardArticleResponseDTO> findArticlesByAuthorId(Long id) {
+        User author =userRepository.findById(id).orElseThrow(()-> new NotFoundException("Author not found"));
+        List<Article> articles = articleRepository.findAllByAuthor(author);
+
+        return articles.stream().map(article -> articleMapper.toCardResponse(article,article.getAuthor().getFirstName())).toList();
 
 }
+
+    }

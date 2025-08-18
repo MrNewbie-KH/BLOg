@@ -32,13 +32,16 @@ public class ArticleController {
     public List<CardArticleResponseDTO> findArticlesByCategory(@PathVariable Long id) {
         return  articleService.findArticlesByCategory(id);
     }
+    @GetMapping("/author/{id}")
+    public List<CardArticleResponseDTO> findArticlesByAuthorId (@PathVariable Long id) {
+        return  articleService.findArticlesByAuthorId(id);
+    }
 
 
 /*
 
 t
-get article by id
-get articles written by an author
+
 update article
 delete article
 add category to an article
