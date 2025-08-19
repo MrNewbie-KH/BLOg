@@ -35,5 +35,4 @@ public class ArticleResponseDTO {
     private List<GroupOfArticles> groups;
     private long likeCount;
     private long commentCount;
-
 }

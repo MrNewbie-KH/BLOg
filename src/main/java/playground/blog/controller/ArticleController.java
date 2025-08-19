@@ -36,6 +36,10 @@ public class ArticleController {
     public List<CardArticleResponseDTO> findArticlesByAuthorId (@PathVariable Long id) {
         return  articleService.findArticlesByAuthorId(id);
     }
+    @PostMapping("/{id}/categories")
+    public ArticleResponseDTO addCategoriesToArticle(@PathVariable Long id,@RequestBody List<Long> categoriesId) {
+        return  articleService.addCategoryToArticle(id,categoriesId);
+    }
 
 
 /*
@@ -45,7 +49,6 @@ t
 update article
 delete article
 add category to an article
-get all articles of a specific category
 add tag to an article
 get all articles based on  a specific tag
 sort article based on the available like count

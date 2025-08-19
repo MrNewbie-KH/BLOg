@@ -12,7 +12,9 @@ import playground.blog.dto.category.CategoryResponseDTO;
 import playground.blog.dto.tag.TagDto;
 import playground.blog.dto.user.UserResponseDTO;
 import playground.blog.entity.*;
+import playground.blog.exception.custom.NotAllowedException;
 import playground.blog.exception.custom.NotFoundException;
+import playground.blog.exception.custom.NotNullException;
 import playground.blog.mapper.ArticleMapper;
 import playground.blog.mapper.CategoryMapper;
 import playground.blog.mapper.TagMapper;
@@ -22,6 +24,7 @@ import playground.blog.service.ArticleService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -99,4 +102,26 @@ public class ArticleServiceImpl implements ArticleService {
 
 }
 
+    @Override
+    public ArticleResponseDTO addCategoryToArticle(Long id, List<Long> categoriesId) {
+//        check the user is the one created the post first
+        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authObject.getName();
+//        look whether the post id is a valid one or not
+        Article currentArticle = articleRepository.findById(id).orElseThrow(()-> new NotFoundException("Article not found"));
+        if(!Objects.equals(currentArticle.getAuthor().getEmail(), userEmail)){
+            throw new NotAllowedException("This article doesn't belong to you, you aren't allowed to modify it");
+        }
+//        add categories to it and if it only has uncategorized then remove it first
+        List<Category>categories = categoryRepository.findAllById(categoriesId);
+        Category uncategorized =categoryRepository.findById(1L).orElseThrow(() -> new NotFoundException("Uncategorized not found"));
+        currentArticle.getCategories().addAll(categories);
+        currentArticle.getCategories().remove(uncategorized);
+        Article finalArticle = articleRepository.save(currentArticle);
+        List<TagDto> tagDtos = finalArticle.getTags().stream().map(tag -> tagMapper.toResponse(tag)).toList();
+        List<CategoryResponseDTO> categoryResponseDTOS = finalArticle.getCategories().stream().map(category -> categoryMapper.toResponse(category)).toList();
+        UserResponseDTO currentUser = userMapper.toResponse(currentArticle.getAuthor());
+        return articleMapper.toResponse(finalArticle,tagDtos,currentUser,categoryResponseDTOS,null,0,0);
+
+    }
     }

@@ -14,4 +14,5 @@ public interface ArticleService {
     ArticleResponseDTO findArticleById(Long id);
     List<CardArticleResponseDTO>findArticlesByCategory(Long id);
     List<CardArticleResponseDTO>findArticlesByAuthorId(Long id);
+    ArticleResponseDTO addCategoryToArticle(Long id, List<Long> categoriesId);
 }

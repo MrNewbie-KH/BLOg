@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import playground.blog.dto.error.ErrorResponseDTO;
-import playground.blog.exception.custom.DuplicateValueException;
-import playground.blog.exception.custom.EntityAlreadyExist;
-import playground.blog.exception.custom.NotFoundException;
-import playground.blog.exception.custom.NotNullException;
+import playground.blog.exception.custom.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -55,5 +52,15 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 
+    }
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponseDTO> handleNotAllowedException(NotAllowedException ex, HttpServletRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.FORBIDDEN)
+                .path(request.getRequestURI())
+                .error("FORBIDDEN")
+                .build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 }
