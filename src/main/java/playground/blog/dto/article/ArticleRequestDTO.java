@@ -17,11 +17,6 @@ public class ArticleRequestDTO {
     private String title;
     private String content;
     private String image;
-    private Long readTime;
     private String status;
-    private List<Long> tagIds;
-    private List<Long> categoryIds;
-    private List<Long> groupIds;
     private List<String> attachments;
-    private Long authorId;
 }

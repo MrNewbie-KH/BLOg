@@ -44,15 +44,14 @@ public class ArticleController {
     public ArticleResponseDTO deleteCategoriesFromArticle(@PathVariable Long id,@RequestBody List<Long> categoriesId) {
         return  articleService.removeCategoriesFromArticle(id,categoriesId);
     }
+    @PutMapping("/{id}")
+    public ArticleResponseDTO updateArticle(@PathVariable Long id, @RequestBody CreateArticleRequestDTO requestDTO) {
+        return articleService.updateArticle(id,requestDTO);
+    }
 
 
 /*
 
-t
-
-update article
-delete article
-add category to an article
 add tag to an article
 get all articles based on  a specific tag
 sort article based on the available like count
