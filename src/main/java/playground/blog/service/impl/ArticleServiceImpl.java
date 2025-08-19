@@ -124,4 +124,28 @@ public class ArticleServiceImpl implements ArticleService {
         return articleMapper.toResponse(finalArticle,tagDtos,currentUser,categoryResponseDTOS,null,0,0);
 
     }
+    @Override
+    public ArticleResponseDTO removeCategoriesFromArticle(Long id, List<Long> categoriesId) {
+//        check the user is the one created the post first
+        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authObject.getName();
+//        look whether the post id is a valid one or not
+        Article currentArticle = articleRepository.findById(id).orElseThrow(()-> new NotFoundException("Article not found"));
+        if(!Objects.equals(currentArticle.getAuthor().getEmail(), userEmail)){
+            throw new NotAllowedException("This article doesn't belong to you, you aren't allowed to modify it");
+        }
+//        add categories to it and if it only has uncategorized then remove it first
+        List<Category>categories = categoryRepository.findAllById(categoriesId);
+        Category uncategorized =categoryRepository.findById(1L).orElseThrow(() -> new NotFoundException("Uncategorized not found"));
+        currentArticle.getCategories().removeAll(categories);
+        if(currentArticle.getCategories().isEmpty())
+        currentArticle.getCategories().add(uncategorized);
+        Article finalArticle = articleRepository.save(currentArticle);
+        List<TagDto> tagDtos = finalArticle.getTags().stream().map(tag -> tagMapper.toResponse(tag)).toList();
+        List<CategoryResponseDTO> categoryResponseDTOS = finalArticle.getCategories().stream().map(category -> categoryMapper.toResponse(category)).toList();
+        UserResponseDTO currentUser = userMapper.toResponse(currentArticle.getAuthor());
+        return articleMapper.toResponse(finalArticle,tagDtos,currentUser,categoryResponseDTOS,null,0,0);
+
     }
+}
+

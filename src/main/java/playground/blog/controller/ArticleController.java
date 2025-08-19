@@ -40,6 +40,10 @@ public class ArticleController {
     public ArticleResponseDTO addCategoriesToArticle(@PathVariable Long id,@RequestBody List<Long> categoriesId) {
         return  articleService.addCategoryToArticle(id,categoriesId);
     }
+    @DeleteMapping("/{id}/categories")
+    public ArticleResponseDTO deleteCategoriesFromArticle(@PathVariable Long id,@RequestBody List<Long> categoriesId) {
+        return  articleService.removeCategoriesFromArticle(id,categoriesId);
+    }
 
 
 /*

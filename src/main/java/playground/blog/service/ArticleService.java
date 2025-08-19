@@ -15,4 +15,5 @@ public interface ArticleService {
     List<CardArticleResponseDTO>findArticlesByCategory(Long id);
     List<CardArticleResponseDTO>findArticlesByAuthorId(Long id);
     ArticleResponseDTO addCategoryToArticle(Long id, List<Long> categoriesId);
+    ArticleResponseDTO removeCategoriesFromArticle (Long id, List<Long> categoriesId);
 }
