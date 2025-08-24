@@ -2,14 +2,18 @@ package playground.blog.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "likes")
+@Table(name = "likes",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id","article_id"})
+)
 public class Like {
 //=========== attributes ==============
     @Id
@@ -21,7 +25,7 @@ public class Like {
 //=========== many to many ============
 //=========== many to one =============
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
+    @JoinColumn(name = "article_id",nullable = false)
     private Article article;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)

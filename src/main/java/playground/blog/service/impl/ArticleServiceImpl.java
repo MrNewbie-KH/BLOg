@@ -40,8 +40,9 @@ public class ArticleServiceImpl implements ArticleService {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final GroupOfArticlesRepository  groupOfArticlesRepository;
+    private final LikeRepository likeRepository;
 
-//    -------------------------------------------------------
+    //    -------------------------------------------------------
     public ArticleResponseDTO createArticle(CreateArticleRequestDTO requestDTO) {
 //        you get request body + get the user from token
 //        first extract user
@@ -81,7 +82,8 @@ public class ArticleServiceImpl implements ArticleService {
         List<CategoryResponseDTO> categoryResponseDTOS = categories.stream().map(category->categoryMapper.toResponse(category)).toList();
         User authorOfTheArticle = article.getAuthor();
         UserResponseDTO userResponseDTO = userMapper.toResponse(authorOfTheArticle);
-       return articleMapper.toResponse(article,tagDTOList,userResponseDTO,categoryResponseDTOS,null,0,0);
+        long likes = likeRepository.countByArticleId(id);
+       return articleMapper.toResponse(article,tagDTOList,userResponseDTO,categoryResponseDTOS,null,likes,0);
     }
 
     @Override
@@ -144,34 +146,37 @@ public class ArticleServiceImpl implements ArticleService {
         List<TagDto> tagDtos = finalArticle.getTags().stream().map(tag -> tagMapper.toResponse(tag)).toList();
         List<CategoryResponseDTO> categoryResponseDTOS = finalArticle.getCategories().stream().map(category -> categoryMapper.toResponse(category)).toList();
         UserResponseDTO currentUser = userMapper.toResponse(currentArticle.getAuthor());
-        return articleMapper.toResponse(finalArticle,tagDtos,currentUser,categoryResponseDTOS,null,0,0);
+        Long likes = likeRepository.countByArticleId(finalArticle.getId());
+        return articleMapper.toResponse(finalArticle,tagDtos,currentUser,categoryResponseDTOS,null,likes,0);
 
     }
 
-    @Override
-    public ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO requestDTO) {
-        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
-        String userEmail = authObject.getName();
-        Article currentArticle = articleRepository.findById(id).orElseThrow(() -> new NotFoundException("Article not found"));
-        if (!Objects.equals(currentArticle.getAuthor().getEmail(), userEmail)) {
-            throw new NotAllowedException("You aren't allowed to perform any post changes");
-        }
-        if (!requestDTO.getTitle().isEmpty())
-            currentArticle.setTitle(requestDTO.getTitle());
-        if (!requestDTO.getContent().isEmpty())
-            currentArticle.setContent(requestDTO.getContent());
-        if (!requestDTO.getImage().isEmpty())
-            currentArticle.setImage(requestDTO.getImage());
-        if (!requestDTO.getStatus().isEmpty())
-            currentArticle.setStatus(requestDTO.getStatus());
-        if (!requestDTO.getAttachments().isEmpty())
-            currentArticle.setAttachments(requestDTO.getAttachments());
-        articleRepository.save(currentArticle);
-        List<TagDto> tagDtos = currentArticle.getTags().stream().map(tag -> tagMapper.toResponse(tag)).toList();
-        List<CategoryResponseDTO> categoryResponseDTOS = currentArticle.getCategories().stream().map(category -> categoryMapper.toResponse(category)).toList();
-        UserResponseDTO currentUser = userMapper.toResponse(currentArticle.getAuthor());
-        return articleMapper.toResponse(currentArticle,tagDtos,currentUser,categoryResponseDTOS,null,0,0);
 
-    }
+//
+//    @Override
+//    public ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO requestDTO) {
+//        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+//        String userEmail = authObject.getName();
+//        Article currentArticle = articleRepository.findById(id).orElseThrow(() -> new NotFoundException("Article not found"));
+//        if (!Objects.equals(currentArticle.getAuthor().getEmail(), userEmail)) {
+//            throw new NotAllowedException("You aren't allowed to perform any post changes");
+//        }
+//        if (!requestDTO.getTitle().isEmpty())
+//            currentArticle.setTitle(requestDTO.getTitle());
+//        if (!requestDTO.getContent().isEmpty())
+//            currentArticle.setContent(requestDTO.getContent());
+//        if (!requestDTO.getImage().isEmpty())
+//            currentArticle.setImage(requestDTO.getImage());
+//        if (!requestDTO.getStatus().isEmpty())
+//            currentArticle.setStatus(requestDTO.getStatus());
+//        if (!requestDTO.getAttachments().isEmpty())
+//            currentArticle.setAttachments(requestDTO.getAttachments());
+//        articleRepository.save(currentArticle);
+//        List<TagDto> tagDtos = currentArticle.getTags().stream().map(tag -> tagMapper.toResponse(tag)).toList();
+//        List<CategoryResponseDTO> categoryResponseDTOS = currentArticle.getCategories().stream().map(category -> categoryMapper.toResponse(category)).toList();
+//        UserResponseDTO currentUser = userMapper.toResponse(currentArticle.getAuthor());
+//        return articleMapper.toResponse(currentArticle,tagDtos,currentUser,categoryResponseDTOS,null,0,0);
+//
+//    }
 }
 

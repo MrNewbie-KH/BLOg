@@ -44,10 +44,10 @@ public class ArticleController {
     public ArticleResponseDTO deleteCategoriesFromArticle(@PathVariable Long id,@RequestBody List<Long> categoriesId) {
         return  articleService.removeCategoriesFromArticle(id,categoriesId);
     }
-    @PutMapping("/{id}")
-    public ArticleResponseDTO updateArticle(@PathVariable Long id, @RequestBody CreateArticleRequestDTO requestDTO) {
-        return articleService.updateArticle(id,requestDTO);
-    }
+//    @PutMapping("/{id}")
+//    public ArticleResponseDTO updateArticle(@PathVariable Long id, @RequestBody CreateArticleRequestDTO requestDTO) {
+////        return articleService.updateArticle(id,requestDTO);
+//    }
 
 
 /*
