@@ -20,6 +20,7 @@ import playground.blog.repository.CommentRepository;
 import playground.blog.repository.UserRepository;
 import playground.blog.service.CommentService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -63,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
         UserResponseDTO userResponseDTO = userMapper.toResponse(user);
 
-        Comment newComment = commentMapper.toEntity(requestDTO, article, isComment, user,parentComment);
+        Comment newComment = commentMapper.toEntity(requestDTO, article, isComment, user, parentComment);
         commentRepository.save(newComment);
 
         return commentMapper.toResponseDTO(newComment, userResponseDTO, 0L);
@@ -85,8 +86,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponseDTO> getComments() {
-        return List.of();
+    public List<CommentResponseDTO> getCommentsPerArticle(Long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new NotFoundException("Article not found"));
+        List<Comment> comments = article.getComments();
+        List<CommentResponseDTO> commentResponseDTOList = comments.stream().map(
+                comment -> {
+                    Long countreplies = commentRepository.countCommentsByParentComment(comment);
+                    return commentMapper.toResponseDTO(comment, userMapper.toResponse(comment.getUser()), countreplies);
+                }
+        ).toList();
+        return commentResponseDTOList;
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface CommentService {
 
     CommentResponseDTO getComment(Long commentId);
 
-    List<CommentResponseDTO> getComments();
+    List<CommentResponseDTO> getCommentsPerArticle(Long articleId);
     List<CommentResponseDTO> getRepliesPerComment(Long commentId);
 
 }

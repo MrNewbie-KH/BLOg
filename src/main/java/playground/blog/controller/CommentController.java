@@ -1,13 +1,13 @@
 package playground.blog.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import playground.blog.dto.comment.CommentRequestDTO;
 import playground.blog.dto.comment.CommentResponseDTO;
+import playground.blog.entity.Comment;
 import playground.blog.service.CommentService;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -19,8 +19,12 @@ public class CommentController {
     public CommentResponseDTO createComment(@RequestBody CommentRequestDTO requestDTO) {
         return commentService.createComment(requestDTO);
     }
-//    create comment
-//    create reply
+    @GetMapping("/article/{id}")
+    public List<CommentResponseDTO> getCommentsPerArticle (@PathVariable Long id) {
+        return commentService.getCommentsPerArticle(id);
+    }
+
+
 //    update comment / reply
 //    delete comment / reply
 //    get all comments
