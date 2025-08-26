@@ -2,6 +2,7 @@ package playground.blog.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class Comment {
 //=========== attributes ==============
      @Id
@@ -24,6 +26,8 @@ public class Comment {
     private Timestamp createdAt;
     @Column(name = "updated_at", nullable = false)
     private Timestamp updatedAt;
+    @Column(name = "is_comment",nullable = false)
+    private boolean isComment;
 
 //=========== relationships ===========
 //=========== one to many =============
@@ -43,4 +47,16 @@ public class Comment {
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;
 //=========== one to one ==============
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = this.createdAt;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
 }
