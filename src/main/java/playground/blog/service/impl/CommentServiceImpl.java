@@ -12,6 +12,7 @@ import playground.blog.dto.user.UserResponseDTO;
 import playground.blog.entity.Article;
 import playground.blog.entity.Comment;
 import playground.blog.entity.User;
+import playground.blog.exception.custom.NotAllowedException;
 import playground.blog.exception.custom.NotFoundException;
 import playground.blog.mapper.CommentMapper;
 import playground.blog.mapper.UserMapper;
@@ -77,12 +78,31 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(Long commentId) {
+       Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("Comment not found"));
+        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+        String username = authObject.getName();
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        if(
+                (comment.getUser().getId().equals(user.getId()))
+                        ||
+                (comment.getArticle().getAuthor().getId().equals(user.getId()))
+        ) {
+            commentRepository.delete(comment);
+        }
+        else{
+            throw new NotAllowedException("Only comment creator or article creator can delete a comment");
+        }
 
     }
 
     @Override
     public CommentResponseDTO getComment(Long commentId) {
-        return null;
+        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+        String username = authObject.getName();
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        UserResponseDTO userResponseDTO = userMapper.toResponse(user);
+        Comment comment =  commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("Comment not found"));
+        return commentMapper.toResponseDTO(comment,userResponseDTO, (long) comment.getReplies().size());
     }
 
     @Override

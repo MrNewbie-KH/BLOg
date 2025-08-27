@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import playground.blog.dto.comment.CommentRequestDTO;
 import playground.blog.dto.comment.CommentResponseDTO;
-import playground.blog.entity.Comment;
 import playground.blog.service.CommentService;
 
 import java.util.List;
@@ -22,6 +21,15 @@ public class CommentController {
     @GetMapping("/article/{id}")
     public List<CommentResponseDTO> getCommentsPerArticle (@PathVariable Long id) {
         return commentService.getCommentsPerArticle(id);
+
+    }
+    @GetMapping("/{id}")
+    public CommentResponseDTO getCommentById(@PathVariable Long id){
+        return commentService.getComment(id);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteCommentById(@PathVariable Long id){
+        commentService.deleteComment(id);
     }
 
 
