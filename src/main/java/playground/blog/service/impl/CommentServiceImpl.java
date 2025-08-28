@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import playground.blog.dto.comment.CommentRequestDTO;
 import playground.blog.dto.comment.CommentResponseDTO;
+import playground.blog.dto.comment.CommentUpdateRequestDTO;
 import playground.blog.dto.user.UserResponseDTO;
 import playground.blog.entity.Article;
 import playground.blog.entity.Comment;
@@ -72,8 +73,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponseDTO updateComment(CommentRequestDTO requestDTO) {
-        return null;
+    public CommentResponseDTO updateComment(Long commentId ,CommentUpdateRequestDTO requestDTO) {
+        Authentication authObject = SecurityContextHolder.getContext().getAuthentication();
+        String username = authObject.getName();
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+        UserResponseDTO userResponseDTO = userMapper.toResponse(user);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("Comment not found"));
+        if(!comment.getUser().getId().equals(user.getId())) {
+            throw new NotAllowedException("You are not allowed to update this comment");
+        }
+        comment.setContent(requestDTO.getContent());
+        commentRepository.save(comment);
+        return commentMapper.toResponseDTO(comment, userResponseDTO, commentRepository.countCommentsByParentCommentId(commentId));
     }
 
     @Override
@@ -111,8 +122,8 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = article.getComments();
         List<CommentResponseDTO> commentResponseDTOList = comments.stream().map(
                 comment -> {
-                    Long countreplies = commentRepository.countCommentsByParentComment(comment);
-                    return commentMapper.toResponseDTO(comment, userMapper.toResponse(comment.getUser()), countreplies);
+                    Long countReplies = commentRepository.countCommentsByParentCommentId(comment.getId());
+                    return commentMapper.toResponseDTO(comment, userMapper.toResponse(comment.getUser()), countReplies);
                 }
         ).toList();
         return commentResponseDTOList;
@@ -120,6 +131,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentResponseDTO> getRepliesPerComment(Long commentId) {
-        return List.of();
+        Comment comment =  commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("Comment not found"));
+        List<CommentResponseDTO> replies = comment.getReplies().stream().map(
+                reply -> commentMapper.toResponseDTO(reply,userMapper.toResponse(reply.getUser()),0L)
+        ).toList();
+        return replies;
     }
 }

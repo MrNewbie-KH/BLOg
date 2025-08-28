@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import playground.blog.dto.comment.CommentRequestDTO;
 import playground.blog.dto.comment.CommentResponseDTO;
+import playground.blog.dto.comment.CommentUpdateRequestDTO;
 import playground.blog.service.CommentService;
 
 import java.util.List;
@@ -27,16 +28,20 @@ public class CommentController {
     public CommentResponseDTO getCommentById(@PathVariable Long id){
         return commentService.getComment(id);
     }
+    @GetMapping("{id}/replies")
+    public List <CommentResponseDTO> getRepliesPerComment(@PathVariable Long id){
+        return commentService.getRepliesPerComment(id);
+    }
     @DeleteMapping("/{id}")
     public void deleteCommentById(@PathVariable Long id){
         commentService.deleteComment(id);
     }
+    @PutMapping("/{id}")
+    public CommentResponseDTO updateComment(@PathVariable Long id, @RequestBody CommentUpdateRequestDTO requestDTO) {
+        return commentService.updateComment(id,requestDTO);
+    }
 
-
-//    update comment / reply
-//    delete comment / reply
 //    get all comments
-//    get all replies per comment
 //    get single comment
 //    get single comment to be shown by the user who is logged
 }

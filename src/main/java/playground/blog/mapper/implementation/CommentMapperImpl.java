@@ -20,6 +20,7 @@ public class CommentMapperImpl implements CommentMapper {
                 .updatedAt(comment.getUpdatedAt())
                 .numberOfReplies(numberOfReplies)
                 .isComment(comment.isComment())
+                .commentId(comment.getId())
                 .build();
     }
 
@@ -31,6 +32,7 @@ public class CommentMapperImpl implements CommentMapper {
                 .isComment(isComment)
                 .user(user)
                 .article(article)
+                .parentComment(parentComment)
                 .build();
     }
 }
